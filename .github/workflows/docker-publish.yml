@@ -60,11 +60,11 @@ jobs:
         id: get_ip
         run: |
           cd terraform
-          IP=$(terraform output instance_public_ip)
-          echo "EC2_IP=$IP" >> $GITHUB_ENV
+          IP=$(terraform output -raw instance_public_ip | tr -d '\r\n')
+          echo "ip=$IP" >> $GITHUB_OUTPUT 
       
       - name: Print EC2 IP
-        run: echo "EC2 IP is $EC2_IP"
+        run: echo "EC2 IP is ${{ steps.get_ip.outputs.ip }}"
 
 
       # Destroy Runner when done
