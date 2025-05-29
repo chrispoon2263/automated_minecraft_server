@@ -59,7 +59,7 @@ jobs:
       - name: Get EC2 Public IP from Terraform
         id: get_ip
         run: |
-          IP=$(terraform output -json instance_public_ip | jq -r)
+          IP=$(terraform output -json instance_public_ip | jq -r '.instance_public_ip.value')
           echo "IP is $IP"
           echo "ip=$IP" >> "$GITHUB_OUTPUT"
 
