@@ -64,7 +64,10 @@ jobs:
           echo "::debug::Extracted IP = '${IP}'"
           echo "EC2_IP=$IP" >> $GITHUB_ENV
       
-      
+      - name: Print EC2 IP
+        run: echo "EC2 IP is $EC2_IP"
+
+
       # Destroy Runner when done
       - name: Cleanup container
         if: always()
