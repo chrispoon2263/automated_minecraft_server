@@ -13,32 +13,32 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # Test & deploy dockerimage to Docker Hub
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # # Test & deploy dockerimage to Docker Hub
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Minecraft Docker image
-        run: docker build -t minecraft-server ./docker
+      # - name: Build Minecraft Docker image
+      #   run: docker build -t minecraft-server ./docker
 
-      - name: Run Minecraft server container
-        run: |
-          docker run -d --name mc-server-test -p 25565:25565 minecraft-server
-          sleep 10  # wait for server to fully start
+      # - name: Run Minecraft server container
+      #   run: |
+      #     docker run -d --name mc-server-test -p 25565:25565 minecraft-server
+      #     sleep 10  # wait for server to fully start
 
-      - name: Install nmap
-        run: sudo apt-get update && sudo apt-get install -y nmap
+      # - name: Install nmap
+      #   run: sudo apt-get update && sudo apt-get install -y nmap
 
-      - name: Test port 25565 with nmap
-        run: |
-          nmap -p 25565 localhost | grep "25565/tcp open" || (echo "Port 25565 not open!" && exit 1)
+      # - name: Test port 25565 with nmap
+      #   run: |
+      #     nmap -p 25565 localhost | grep "25565/tcp open" || (echo "Port 25565 not open!" && exit 1)
 
-      - name: Push to Docker Hub (if test passed)
-        run: |
-          docker tag minecraft-server ${{ secrets.DOCKERHUB_USERNAME }}/minecraft-server:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/minecraft-server:latest
+      # - name: Push to Docker Hub (if test passed)
+      #   run: |
+      #     docker tag minecraft-server ${{ secrets.DOCKERHUB_USERNAME }}/minecraft-server:latest
+      #     docker push ${{ secrets.DOCKERHUB_USERNAME }}/minecraft-server:latest
 
       # Terraform test and deploy EC2 instance
       - name: Setup Terraform
