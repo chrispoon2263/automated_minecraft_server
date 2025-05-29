@@ -42,7 +42,7 @@ jobs:
 
       # Terraform test and deploy EC2 instance
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.5.7
 
@@ -60,9 +60,8 @@ jobs:
         id: get_ip
         run: |
           cd terraform
-          IP=$(terraform output -raw instance_public_ip | tr -d '\r\n')
+          IP=$(terraform-bin output -raw instance_public_ip)
           echo "$IP"
-          $IP | awk '{print $1}'
 
       # Destroy Runner when done
       - name: Cleanup container
