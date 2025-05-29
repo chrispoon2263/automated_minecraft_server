@@ -40,7 +40,12 @@ jobs:
           docker tag minecraft-server ${{ secrets.DOCKERHUB_USERNAME }}/minecraft-server:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/minecraft-server:latest
 
-      # Terraform deploy
+      # Terraform test and deploy EC2 instance
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.7
+          
       - name: Terraform Init & Apply
         run: |
           cd terraform
@@ -49,6 +54,14 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+      - name: Get EC2 Public IP from Terraform
+        id: get_ip
+        run: |
+          cd terraform
+          IP=$(terraform output -raw instance_public_ip)
+          echo "EC2_IP=$IP" >> $GITHUB_ENV
+      
       
       # Destroy Runner when done
       - name: Cleanup container
