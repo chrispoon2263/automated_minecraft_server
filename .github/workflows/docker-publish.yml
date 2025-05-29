@@ -65,7 +65,7 @@ jobs:
       
       - name: Print EC2 IP
         env: 
-          IP: ${{ steps.get_ip.outputs.ip }}
+          IP: ${{ steps.get_ip.outputs.EC2_IP }}
         run: echo "EC2 IP is $IP"
 
 
