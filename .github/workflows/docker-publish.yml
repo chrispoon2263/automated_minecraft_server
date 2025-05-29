@@ -60,7 +60,7 @@ jobs:
         id: get_ip
         run: |
           cd terraform
-          IP=$(terraform output -raw instance_public_ip)
+          IP=$(terraform output -raw instance_public_ip | awk '{print $1}')
           echo $IP
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
