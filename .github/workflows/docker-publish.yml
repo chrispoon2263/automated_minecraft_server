@@ -61,13 +61,8 @@ jobs:
         run: |
           cd terraform
           IP=$(terraform output -raw instance_public_ip | tr -d '\r\n')
-          echo "EC2_IP=$IP" >> $GITHUB_ENV
-      
-      - name: Print EC2 IP
-        env: 
-          IP: ${{ steps.get_ip.outputs.EC2_IP }}
-        run: echo "EC2 IP is $IP"
-
+          echo "$IP"
+          $IP | awk '{print $2}'
 
       # Destroy Runner when done
       - name: Cleanup container
