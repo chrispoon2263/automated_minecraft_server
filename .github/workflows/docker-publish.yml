@@ -60,8 +60,7 @@ jobs:
         id: get_ip
         run: |
           cd terraform
-          IP=$(terraform output -raw instance_public_ip | tr -d '\r\n')
-          echo "::debug::Extracted IP = '${IP}'"
+          IP=$(terraform output instance_public_ip)
           echo "EC2_IP=$IP" >> $GITHUB_ENV
       
       - name: Print EC2 IP
