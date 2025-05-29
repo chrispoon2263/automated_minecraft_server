@@ -60,7 +60,8 @@ jobs:
         id: get_ip
         run: |
           cd terraform
-          IP=$(terraform output -raw instance_public_ip | tr -d '\r')
+          IP=$(terraform output -raw instance_public_ip | tr -d '\r\n')
+          echo "::debug::Extracted IP = '${IP}'"
           echo "EC2_IP=$IP" >> $GITHUB_ENV
       
       
@@ -68,7 +69,11 @@ jobs:
       - name: Cleanup container
         if: always()
         run: |
-          docker stop mc-server-test || true
-          docker rm mc-server-test || true
+          # docker stop mc-server-test || true
+          # docker rm mc-server-test || true
           cd terraform
-          terraform destroy || true
+          terraform destroy -auto-approve
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
