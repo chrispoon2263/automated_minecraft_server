@@ -13,6 +13,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # Test & deploy dockerimage to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -20,7 +21,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Minecraft Docker image
-        run: docker build -t minecraft-server .
+        run: docker build -t minecraft-server ./docker
 
       - name: Run Minecraft server container
         run: |
@@ -39,6 +40,17 @@ jobs:
           docker tag minecraft-server ${{ secrets.DOCKERHUB_USERNAME }}/minecraft-server:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/minecraft-server:latest
 
+      # Terraform deploy
+      - name: Terraform Init & Apply
+        run: |
+          cd terraform
+          terraform init
+          terraform apply -auto-approve
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+      # Destroy Runner when done
       - name: Cleanup container
         if: always()
         run: |
