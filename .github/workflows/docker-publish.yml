@@ -70,3 +70,5 @@ jobs:
         run: |
           docker stop mc-server-test || true
           docker rm mc-server-test || true
+          cd terraform
+          terraform destroy || true
