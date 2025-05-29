@@ -28,8 +28,8 @@ jobs:
       #     docker run -d --name mc-server-test -p 25565:25565 minecraft-server
       #     sleep 10  # wait for server to fully start
 
-      # - name: Install nmap
-      #   run: sudo apt-get update && sudo apt-get install -y nmap
+      - name: Install nmap
+        run: sudo apt-get update && sudo apt-get install -y nmap jq
 
       # - name: Test port 25565 with nmap
       #   run: |
@@ -59,9 +59,10 @@ jobs:
       - name: Get EC2 Public IP from Terraform
         id: get_ip
         run: |
-          IP=$(terraform output -raw instance_public_ip)
+          IP=$(terraform output -json instance_public_ip | jq -r)
           echo "IP is $IP"
           echo "ip=$IP" >> "$GITHUB_OUTPUT"
+
 
       - name: Use the IP
         run: echo "The EC2 public IP is ${{ steps.get_ip.outputs.ip }}"
