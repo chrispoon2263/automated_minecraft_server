@@ -88,8 +88,9 @@ jobs:
       - name: Run Ansible Playbook
         run: |
           cd ansible
-          ANSIBLE_HOST_KEY_CHECKING: False
           ansible-playbook -i ./inventory/hosts.ini ./playbooks/minecraft.yaml
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: False
         
       # Destroy Runner when done
       - name: Cleanup container
