@@ -62,7 +62,7 @@ jobs:
           cd terraform
           IP=$(terraform output -raw instance_public_ip | tr -d '\r\n')
           echo "$IP"
-          $IP | awk '{print $2}'
+          $IP | awk '{print $1}'
 
       # Destroy Runner when done
       - name: Cleanup container
