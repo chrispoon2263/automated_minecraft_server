@@ -60,7 +60,6 @@ jobs:
         id: get_ip
         run: |
           cd terraform
-          terraform init -reconfigure
           IP=$(terraform-bin output -raw instance_public_ip)
           echo "$IP"
           echo "ip=$IP" >> "$GITHUB_OUTPUT"
