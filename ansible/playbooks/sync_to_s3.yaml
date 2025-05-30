@@ -1,0 +1,16 @@
+---
+- name: Sync Minecraft server data to S3
+  hosts: servers
+  gather_facts: false
+  become: true
+
+# Bandaid solution using environment variables to sync s3
+# unable to create IAM roles on student learner account (normally would never do this!)
+  tasks:
+    - name: Sync Minecraft server files to S3 before destroy
+      ansible.builtin.command: >
+        aws s3 sync /home/ec2-user/minecraft-data s3://chris-terraform-minecraft-bucket/server_files
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+        AWS_SECRET_ACCESS_KEY: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+        AWS_SESSION_TOKEN: "{{ lookup('env', 'AWS_SESSION_TOKEN') | default('', true) }}"

@@ -26,6 +26,8 @@ ansible: inventory
 	ansible-playbook -i $(INVENTORY_FILE) $(ANSIBLE_DIR)/playbooks/minecraft.yaml
 
 destroy:
+	@echo "Syncing Minecraft data to S3 before destroying..."
+	ansible-playbook -i $(INVENTORY_FILE) $(ANSIBLE_DIR)/playbooks/sync_to_s3.yaml && \
 	cd $(TERRAFORM_DIR) && terraform destroy -auto-approve
 
 test:
