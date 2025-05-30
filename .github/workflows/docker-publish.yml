@@ -44,7 +44,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.6.6
+          terraform_version: 1.12.1
 
       - name: Terraform Init & Apply
         run: |
@@ -60,6 +60,7 @@ jobs:
         id: get_ip
         run: |
           cd terraform
+          terraform init -reconfigure
           IP=$(terraform-bin output -raw instance_public_ip)
           echo "$IP"
           echo "ip=$IP" >> "$GITHUB_OUTPUT"
