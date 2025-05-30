@@ -108,5 +108,5 @@ jobs:
       - name: Cleanup container
         if: always()
         run: |
-          # docker stop mc-server-test || true
-          # docker rm mc-server-test || true
+          docker stop mc-server-test || true
+          docker rm mc-server-test || true
