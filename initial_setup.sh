@@ -13,17 +13,17 @@ else
 
   # Copy minecraft server files to S3 bucket
   aws s3 cp ./server_files s3://chris-terraform-minecraft-bucket/server_files --region us-west-2 --recursive
-fi
 
-# Create the AWS key pair and place into ~/.ssh/mineraft_key.pm
-echo "Generating AWS ssh key pair"
-mkdir -p ~/.ssh
-rm -f ~/.ssh/minecraft_key.pem
-aws ec2 create-key-pair \
-  --key-name minecraft_key \
-  --query 'KeyMaterial' \
-  --output text > ~/.ssh/minecraft_key.pem
-chmod 400 ~/.ssh/minecraft_key.pem
+  # Create the AWS key pair and place into ~/.ssh/mineraft_key.pm
+  echo "Generating AWS ssh key pair"
+  mkdir -p ~/.ssh
+  rm -f ~/.ssh/minecraft_key.pem
+  aws ec2 create-key-pair \
+    --key-name minecraft_key \
+    --query 'KeyMaterial' \
+    --output text > ~/.ssh/minecraft_key.pem
+  chmod 400 ~/.ssh/minecraft_key.pem
+fi
 
 # Bandaid solution using environment variables to sync s3
 # unable to create IAM roles on student learner account (normally would never do this!)

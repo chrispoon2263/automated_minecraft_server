@@ -37,23 +37,22 @@ $ aws configure
 >  - AWS will place the credentials in ~/.aws/credentials
 >  - If you have a student learner account make sure to also add your aws_session_token at the end of the file
 
-5. To allow E2E deployment via GitHub Actions go to Github Settings -> Secrete and Variables -> Actions -> new repository secret
+
+> [!IMPORTANT]
+> - Only have to run this one time to provision an S3 bucket and place first Minecraft Server settings and Terraform state into S3 whether doing local or push deployment
+
+5. Run the initial setup to create S3 bucket on AWS if not already provisioned
+```bash
+$ source initial_setup.sh
+```
+
+6. To allow E2E deployment via GitHub Actions go to Github Settings -> Secrete and Variables -> Actions -> new repository secret and add the following variables:
 	- AWS_ACCESS_KEY_ID
 	- AWS_SECRET_ACCESS_KEY
 	- AWS_SESSION_TOKEN       (only for student learner accounts)
 	- DOCKERHUB_TOKEN          (Will push to your Dockerhub)
 	- DOCKERHUB_USERNAME  (Will push to your Dockerhub)
 	- SSH_MINECRAFT_KEY        (The newly generated key from above)
-
-
-> [!IMPORTANT]
-> - Only have to run this one time to provision an S3 bucket and place first Minecraft Server settings and Terraform state into S3 whether doing local or push deployment
-
-6. Run the initial setup to create S3 bucket on AWS
-```bash
-$ source initial_setup.sh
-```
-
 
 
 ---
@@ -92,6 +91,10 @@ $ source initial_setup.sh
 1. This will call Terraform apply to create the EC2 instance, Run the Ansible Playbook to start the Docker Container, and Test if the Minecraft server is running.
 	- You can call this command if make any changes to the Terraform files or Ansible playbook
 ```bash
+# Create the needed environment variables
+$ source initial_setup.sh
+
+# Runs the entire pipeline locally
 $ make all
 ```
 

@@ -16,7 +16,7 @@ inventory:
 	@IP=$$(cd $(TERRAFORM_DIR) && terraform output -raw instance_public_ip); \
 	echo "[servers]" > $(INVENTORY_FILE); \
 	echo "$$IP ansible_user=$(ANSIBLE_USER) ansible_ssh_private_key_file=$(PRIVATE_KEY)" >> $(INVENTORY_FILE); \
-	for i in {1..10} do \
+	for i in {1..10}; do \
 		ssh-keyscan -H $$IP >> $(HOME)/.ssh/known_hosts && break; \
 		echo "Retrying ssh-keyscan..."; \
 		sleep 7; \
@@ -32,9 +32,9 @@ destroy:
 
 test:
 	@IP=$$(cd $(TERRAFORM_DIR) && terraform output -raw instance_public_ip); \
-	for i in {1..10} do \
+	for i in {1..10}; do \
 		nmap -Pn -p 25565 $$IP | grep "open" && break;\
 		echo "Retrying, Minecraft world still loading ..."; \
 		sleep 10; \
 	done; \
-	echo "Minecraft Server public IP address at $$IP:25565"
+	echo "Minecraft Server public IP address at $$IP:25565" 
