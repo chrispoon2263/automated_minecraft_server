@@ -8,7 +8,6 @@ ANSIBLE_USER=ec2-user
 
 all: apply ansible test
 
-
 apply:
 	cd $(TERRAFORM_DIR) && terraform apply -auto-approve
 
