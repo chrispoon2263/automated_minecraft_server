@@ -5,6 +5,7 @@ if aws s3api head-bucket --bucket chris-terraform-minecraft-bucket 2>/dev/null; 
   echo "Bucket already exists"
 else
   # provision an S3 bucket on AWS
+  echo "Creating S3 bucket, initial Minecraft server files, and terraformt.tfstate..."
   aws s3api create-bucket --bucket chris-terraform-minecraft-bucket \
     --region us-west-2 --create-bucket-configuration LocationConstraint=us-west-2
   # Copy terraform on local machine to S3 bucket
@@ -14,6 +15,15 @@ else
   aws s3 cp ./server_files s3://chris-terraform-minecraft-bucket/server_files --region us-west-2 --recursive
 fi
 
+# Create the AWS key pair and place into ~/.ssh/mineraft_key.pm
+echo "Generating AWS ssh key pair"
+mkdir -p ~/.ssh
+rm -f ~/.ssh/minecraft_key.pem
+aws ec2 create-key-pair \
+  --key-name minecraft_key \
+  --query 'KeyMaterial' \
+  --output text > ~/.ssh/minecraft_key.pem
+chmod 400 ~/.ssh/minecraft_key.pem
 
 # Bandaid solution using environment variables to sync s3
 # unable to create IAM roles on student learner account (normally would never do this!)

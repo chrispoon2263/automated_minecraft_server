@@ -30,7 +30,7 @@ jobs:
       - name: Run Minecraft server container
         run: |
           docker run -d --name mc-server-test -p 25565:25565 minecraft-server
-          sleep 10  # wait for server to fully start
+          sleep 15  # wait for server to fully start
 
       - name: Install nmap
         run: sudo apt-get update && sudo apt-get install -y nmap
@@ -97,13 +97,21 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: False
 
       # Test if minecraft server is up
-      - name: Wait and test Minecraft port (25565) on EC2
+      - name: Wait and test Minecraft port (25565) on EC2 instance
         run: |
-          echo "Waiting 30 seconds for Minecraft server to start..."
-          sleep 30
-          echo "Testing EC2 at ${{ steps.get_ip.outputs.ip }}"
-          nmap -Pn -p 25565 ${{ steps.get_ip.outputs.ip }} | grep "25565/tcp open" || (echo "Port 25565 not open!" && exit 1)
-        
+          echo "Waiting for Minecraft server to start on ${{ steps.get_ip.outputs.ip }}..."
+          for i in {1..10}; do
+            if nmap -Pn -p 25565 ${{ steps.get_ip.outputs.ip }} | grep "25565/tcp open"; then
+              echo "Minecraft server is up at ${{ steps.get_ip.outputs.ip }}:25565"
+              break
+            fi
+            echo "Attempt $i: Port 25565 not open yet, retrying in 10 seconds..."
+            sleep 10
+          done
+
+          # Final check after loop
+          nmap -Pn -p 25565 ${{ steps.get_ip.outputs.ip }} | grep "25565/tcp open" || (echo "Port 25565 is not open after retries!" && exit 1)
+
       # Destroy Runner when done
       - name: Cleanup container
         if: always()
