@@ -18,7 +18,7 @@ inventory:
 	echo "$$IP ansible_user=$(ANSIBLE_USER) ansible_ssh_private_key_file=$(PRIVATE_KEY)" >> $(INVENTORY_FILE); \
 	for i in {1..10}; do \
 		ssh-keyscan -H $$IP >> $(HOME)/.ssh/known_hosts && break; \
-		echo "Retrying ssh-keyscan..."; \
+		echo "Retrying ssh scan, EC2 instance still provisioning..."; \
 		sleep 7; \
 	done
 
