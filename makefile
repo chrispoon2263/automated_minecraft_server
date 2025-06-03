@@ -1,7 +1,7 @@
 TERRAFORM_DIR=terraform
 ANSIBLE_DIR=ansible
 INVENTORY_FILE=$(ANSIBLE_DIR)/inventory/hosts.ini
-PRIVATE_KEY=~/.ssh/minecraft_key.pem
+PRIVATE_KEY=~/.ssh/minecraft_key
 ANSIBLE_USER=ec2-user
 
 .PHONY: all apply terraform ansible inventory destroy test
@@ -9,6 +9,7 @@ ANSIBLE_USER=ec2-user
 all: apply ansible test
 
 apply:
+	cd $(TERRAFORM_DIR) && terraform init -reconfigure
 	cd $(TERRAFORM_DIR) && terraform apply -auto-approve
 
 inventory:
