@@ -33,7 +33,7 @@ $ cd automated_minecraft_server
 $ source initial_setup.sh
 ```
 
-4. To allow E2E deployment via GitHub Actions on push go to Github Settings -> Secrete and Variables -> Actions -> new repository secret and add the following variables:
+4. To allow E2E deployment via GitHub Actions on push go to Github Settings -> Secrete and Variables -> Actions -> new repository secret and add the following variables and values:
 	- AWS_ACCESS_KEY_ID             (Grab from AWS Learner Lab Details)
 	- AWS_SECRET_ACCESS_KEY  (Grab from AWS Learner Lab Details)
 	- AWS_SESSION_TOKEN            (Only for student learner accounts)
