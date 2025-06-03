@@ -106,7 +106,7 @@ $ make destroy
 
 #### Deploy on push using GitHub Actions CI/CD
 1. Make a change to the docker, terraform files, or ansible playbook and push to GitHub to start the CI/CD Deployment 
-2. Upon push it will follow the architecture diagram above: [Architecture](#architecture)
+2. Upon push it will follow the architecture diagram above: [Architecture](#cloud-architecture)
 ```bash
 $ git push
 ```
